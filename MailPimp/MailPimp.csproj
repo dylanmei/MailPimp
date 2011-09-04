@@ -77,9 +77,12 @@
     <Compile Include="DynamicModelTransformer.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="DeliveryModel.cs" />
+    <Compile Include="Mail.cs" />
+    <Compile Include="Mailbag.cs" />
     <Compile Include="TemplateView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateModule.cs" />
+    <Compile Include="TextStream.cs" />
     <Compile Include="ViewEngine\DescriptorBuilder.cs" />
     <Compile Include="ViewEngine\DescriptorParameters.cs" />
     <Compile Include="ViewEngine\MasterGrammar.cs" />
