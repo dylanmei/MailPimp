@@ -1,6 +1,6 @@
-﻿using System;
-using Nancy;
+﻿using Nancy;
 using Nancy.ModelBinding;
+using MailPimp.Mail;
 
 namespace MailPimp
 {
@@ -16,7 +16,10 @@ namespace MailPimp
 			//    return Response.AsJson(new {parameters.Name});
 			//};
 			Post["/{name}/deliver"] = parameters => {
-				throw new NotImplementedException();
+				var model = this.Bind<DeliveryModel>();
+				var sender = GetSender();
+				sender.Send(GetMailbag(model));
+				return HttpStatusCode.OK;
 			};
 			Post["/{name}/mailbag"] = parameters => {
 				var model = this.Bind<DeliveryModel>();
@@ -26,6 +29,11 @@ namespace MailPimp
 				var model = this.Bind<DeliveryModel>();
 				return View["happy.spark", model];
 			};
+		}
+
+		static IMailSender GetSender()
+		{
+			return new MailSender();
 		}
 
 		Mailbag GetMailbag(DeliveryModel delivery)

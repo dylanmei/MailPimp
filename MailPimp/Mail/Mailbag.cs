@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-namespace MailPimp
+namespace MailPimp.Mail
 {
 	public class Mailbag
 	{
@@ -22,14 +22,14 @@ namespace MailPimp
 			Subject = subject;
 		}
 
-		public IEnumerator<Mail> GetMail()
+		public IEnumerable<Mail> GetMail()
 		{
 			return To.Select(t => new Mail {
 				From = From,
 				To = t,
 				Subject = Subject,
 				Contents = Contents
-			}).GetEnumerator();
+			});
 		}
 	}
 }

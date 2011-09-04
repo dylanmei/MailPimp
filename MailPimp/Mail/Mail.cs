@@ -1,4 +1,4 @@
-﻿namespace MailPimp
+﻿namespace MailPimp.Mail
 {
 	public class Mail
 	{
