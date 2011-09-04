@@ -12,4 +12,5 @@ _ReSharper*
 *.pdb
 
 packages/*
+!packages/nuget.exe
 !packages/repositories.config
