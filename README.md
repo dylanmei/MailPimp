@@ -1,0 +1,1 @@
+A simple email template service built with Spark and Nancy.

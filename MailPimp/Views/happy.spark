@@ -1,0 +1,13 @@
+﻿
+<html>
+	<body>
+		Hello, my name is ${From.Name}
+		And I love ${Model.Name}
+		I am ${Model.Value} Happy!
+		<ul>
+			<for each="var address in To">
+				<li>${address.Name} &lt;${address.Email}&gt;</li>
+			</for>
+		</ul>
+	</body>
+</html>
