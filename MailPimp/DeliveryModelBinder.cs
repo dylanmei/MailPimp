@@ -5,9 +5,9 @@ using KeyValueDictionary = System.Collections.Generic.IDictionary<string, object
 
 namespace MailPimp
 {
-	public class EmailModelBinder : DynamicModelBinder
+	public class DeliveryModelBinder : DynamicModelBinder
 	{
-		static readonly IDynamicModelTransformer Transformer = new EmailModelTransformer();
+		static readonly IDynamicModelTransformer Transformer = new DeliveryModelTransformer();
 
 		protected override IDynamicModelTransformer GetModelTransformer()
 		{
@@ -16,15 +16,15 @@ namespace MailPimp
 
 		public override bool CanBind(Type modelType)
 		{
-			return typeof(EmailModel) == modelType || base.CanBind(modelType);
+			return typeof(DeliveryModel) == modelType || base.CanBind(modelType);
 		}
 	}
 
-	public class EmailModelTransformer : IDynamicModelTransformer
+	public class DeliveryModelTransformer : IDynamicModelTransformer
 	{
 		public object Transform(dynamic source)
 		{
-			var model = new EmailModel();
+			var model = new DeliveryModel();
 			if (!HasMember(source, "Model")) model.Model = model;
 			else
 			{
@@ -35,12 +35,12 @@ namespace MailPimp
 			return model;
 		}
 
-		static void BindModel(dynamic source, EmailModel model)
+		static void BindModel(dynamic source, DeliveryModel model)
 		{
 			model.Model = source.Model;
 		}
 
-		static void BindHeaders(dynamic source, EmailModel model)
+		static void BindHeaders(dynamic source, DeliveryModel model)
 		{
 			if (HasMember(source, "Subject"))
 				model.Subject = source.Subject;

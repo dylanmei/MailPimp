@@ -1,10 +1,9 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MailPimp.ViewEngine;
 
 namespace MailPimp
 {
-	public abstract class EmailView : View
+	public abstract class TemplateView : View
 	{
 		public Address From { get; set; }
 		public ICollection<Address> To { get; set; }
@@ -12,12 +11,12 @@ namespace MailPimp
 
 		public override void Bind(dynamic model)
 		{
-			if (model is EmailModel)
-				Bind((EmailModel)model);
+			if (model is DeliveryModel)
+				Bind((DeliveryModel)model);
 			Model = model.Model;
 		}
 
-		void Bind(EmailModel model)
+		void Bind(DeliveryModel model)
 		{
 			From = model.From;
 			To = model.To;

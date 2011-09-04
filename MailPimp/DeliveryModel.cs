@@ -2,9 +2,9 @@
 
 namespace MailPimp
 {
-	public class EmailModel
+	public class DeliveryModel
 	{
-		public EmailModel()
+		public DeliveryModel()
 		{
 			To = new List<Address>();
 			From = new Address();

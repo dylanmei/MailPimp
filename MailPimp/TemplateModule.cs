@@ -18,8 +18,9 @@ namespace MailPimp
 			Post["/{name}/deliver"] = parameters => {
 				throw new NotImplementedException();
 			};
-			Post["/{name}/render"] = parameters => {
-				var model = this.Bind<EmailModel>();
+			Post["/{name}/display"] = parameters => {
+				var model = this.Bind<DeliveryModel>();
+
 				return View["happy.spark", model];
 			};
 		}

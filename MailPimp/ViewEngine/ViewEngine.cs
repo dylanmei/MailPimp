@@ -8,17 +8,17 @@ using Nancy.ViewEngines;
 
 namespace MailPimp.ViewEngine
 {
-    public class MailPimpViewEngine : IViewEngine
+    public class TemplateViewEngine : IViewEngine
     {
         readonly IDescriptorBuilder descriptorBuilder;
         readonly ISparkViewEngine engine;
         readonly ISparkSettings settings;
 
-        public MailPimpViewEngine()
+        public TemplateViewEngine()
         {
             settings = (ISparkSettings) ConfigurationManager.GetSection("spark") ?? new SparkSettings();
             engine = new SparkViewEngine(settings) {
-                DefaultPageBaseType = typeof(EmailView).FullName
+                DefaultPageBaseType = typeof(TemplateView).FullName
             };
 
             descriptorBuilder = new DescriptorBuilder(engine);
