@@ -8,13 +8,13 @@ using Nancy.ViewEngines;
 
 namespace MailPimp.ViewEngine
 {
-    public class TemplateViewEngine : IViewEngine
+    public class ViewEngine : IViewEngine
     {
         readonly IDescriptorBuilder descriptorBuilder;
         readonly ISparkViewEngine engine;
         readonly ISparkSettings settings;
 
-        public TemplateViewEngine()
+        public ViewEngine()
         {
             settings = (ISparkSettings) ConfigurationManager.GetSection("spark") ?? new SparkSettings();
             engine = new SparkViewEngine(settings) {
@@ -78,25 +78,25 @@ namespace MailPimp.ViewEngine
             return new ViewResult(view);
         }
 
-        static InMemoryViewFolder GetMemoryViewMap(IEnumerable<ViewLocationResult> viewLocationResults)
-        {
-            var memoryViewMap = new InMemoryViewFolder();
-            foreach (var viewLocationResult in viewLocationResults)
-            {
-                memoryViewMap.Add(GetViewFolderKey(viewLocationResult), viewLocationResult.Contents.Invoke().ReadToEnd());
-            }
-            return memoryViewMap;
-        }
+		static InMemoryViewFolder GetMemoryViewMap(IEnumerable<ViewLocationResult> viewLocationResults)
+		{
+		    var memoryViewMap = new InMemoryViewFolder();
+		    foreach (var viewLocationResult in viewLocationResults)
+		    {
+		        memoryViewMap.Add(GetViewFolderKey(viewLocationResult), viewLocationResult.Contents.Invoke().ReadToEnd());
+		    }
+		    return memoryViewMap;
+		}
 
-        static string GetViewFolderKey(ViewLocationResult viewLocationResult)
-        {
-            return string.Concat(GetNamespaceEncodedPathViewPath(viewLocationResult.Location),
-				Path.DirectorySeparatorChar, viewLocationResult.Name, ".", viewLocationResult.Extension);
-        }
+		static string GetViewFolderKey(ViewLocationResult viewLocationResult)
+		{
+		    return string.Concat(GetNamespaceEncodedPathViewPath(viewLocationResult.Location),
+		        Path.DirectorySeparatorChar, viewLocationResult.Name, ".", viewLocationResult.Extension);
+		}
 
-        static string GetNamespaceEncodedPathViewPath(string viewPath)
-        {
-            return viewPath.Replace('/', '_');
-        }
+		static string GetNamespaceEncodedPathViewPath(string viewPath)
+		{
+		    return viewPath.Replace('/', '_');
+		}
     }
 }

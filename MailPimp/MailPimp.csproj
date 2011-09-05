@@ -86,9 +86,11 @@
     <Compile Include="TextStream.cs" />
     <Compile Include="ViewEngine\DescriptorBuilder.cs" />
     <Compile Include="ViewEngine\DescriptorParameters.cs" />
+    <Compile Include="ViewEngine\DistantViewLocationProvider.cs" />
     <Compile Include="ViewEngine\MasterGrammar.cs" />
     <Compile Include="ViewEngine\View.cs" />
     <Compile Include="ViewEngine\ViewEngine.cs" />
+    <Compile Include="ViewEngine\ViewEngineBootstrapper.cs" />
     <Compile Include="ViewEngine\ViewResult.cs" />
     <Compile Include="DeliveryModelBinder.cs" />
   </ItemGroup>
