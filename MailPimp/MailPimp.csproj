@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.gitignore" />
+    <Content Include="Content\logo.png" />
+    <Content Include="Content\splash.jpg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -73,6 +75,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configure.cs" />
     <Compile Include="DynamicModelBinder.cs" />
     <Compile Include="DynamicModelTransformer.cs" />
     <Compile Include="Address.cs" />
