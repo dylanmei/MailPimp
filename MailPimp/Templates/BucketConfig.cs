@@ -15,7 +15,7 @@ namespace MailPimp.Templates
 		public static string GetValue()
 		{
 			string value;
-			if ((value = ConfigurationManager.AppSettings[Keys.S3_BUCKET_NAME]) == null)
+			if ((value = ConfigurationManager.AppSettings[Keys.S3_BUCKET_NAME]) == "")
 			{
 				if ((value = GetHiddenValue()) == null)
 					throw new ConfigurationErrorsException("Missing S3 bucket name.");
