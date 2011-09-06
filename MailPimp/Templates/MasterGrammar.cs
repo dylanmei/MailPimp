@@ -2,10 +2,12 @@
 using System.Linq;
 using Spark.Parser;
 
-namespace MailPimp.ViewEngine
+namespace MailPimp.Templates
 {
 	class MasterGrammar : CharGrammar
 	{
+		public ParseAction<string> ParseUseMaster { get; private set; }
+
 		public MasterGrammar(string prefix)
 		{
 			var whiteSpace0 = Rep(Ch(Char.IsWhiteSpace));
@@ -28,16 +30,14 @@ namespace MailPimp.ViewEngine
 			ParseUseMaster =
 				pos =>
 				{
-					for (Position scan = pos; scan.PotentialLength() != 0; scan = scan.Advance(1))
+					for (var scan = pos; scan.PotentialLength() != 0; scan = scan.Advance(1))
 					{
-						ParseResult<string> result = useMaster(scan);
+						var result = useMaster(scan);
 						if (result != null)
 							return result;
 					}
 					return null;
 				};
 		}
-
-		public ParseAction<string> ParseUseMaster { get; private set; }
 	}
 }

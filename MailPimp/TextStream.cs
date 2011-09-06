@@ -6,18 +6,17 @@ namespace MailPimp
 {
 	class TextStream : Stream
 	{
-		readonly StringBuilder buffer;
-		readonly Encoding encoding;
+		readonly StringBuilder builder;
+		readonly Encoding encoding = new UTF8Encoding();
 
 		public TextStream()
 		{
-			buffer = new StringBuilder();
-			encoding = new UTF8Encoding();
+			builder = new StringBuilder();
 		}
 
 		public override bool CanRead
 		{
-			get { return true; }
+			get { return false; }
 		}
 
 		public override bool CanSeek
@@ -36,7 +35,7 @@ namespace MailPimp
 
 		public override long Length
 		{
-			get { return 0 ;  }
+			get { return builder.Length;  }
 		}
        
 		public override long Position
@@ -47,27 +46,27 @@ namespace MailPimp
 		
 		public override int Read(byte[] buffer, int offset, int count)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override void Write(byte[] buffer, int offset, int count)
 		{
-			this.buffer.Append(encoding.GetString(buffer, offset, count));
+			builder.Append(encoding.GetString(buffer, offset, count));
 		}
 		
 		public override long Seek(long offset, SeekOrigin origin)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override void SetLength(long value)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override string ToString()
 		{
-			return buffer.ToString();
+			return builder.ToString();
 		}
 	}
 }

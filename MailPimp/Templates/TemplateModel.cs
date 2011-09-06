@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace MailPimp
+namespace MailPimp.Templates
 {
-	public class DeliveryModel
+	public class TemplateModel
 	{
-		public DeliveryModel()
+		public TemplateModel()
 		{
 			To = new List<Address>();
 			From = new Address();

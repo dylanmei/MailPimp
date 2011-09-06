@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace MailPimp.ViewEngine
+namespace MailPimp.Templates
 {
-    public class ViewResult
+    class TemplateViewResult
     {
-        public View View { get; set; }
+        public TemplateView View { get; set; }
 
-		public ViewResult(View view)
+		public TemplateViewResult(TemplateView view)
         {
             View = view;
         }
 
-        public ViewResult(List<string> searchedLocations)
+        public TemplateViewResult(List<string> searchedLocations)
         {
             var locations = string.Empty;
             searchedLocations.ForEach(location =>
@@ -20,7 +20,7 @@ namespace MailPimp.ViewEngine
             if (!string.IsNullOrEmpty(locations))
             {
                 throw new Spark.Compiler.CompilerException(
-					string.Format("The view could not be in any of the following locations: {0}", locations));
+					string.Format("The view was not in any of the following locations: {0}", locations));
             }
         }
     }

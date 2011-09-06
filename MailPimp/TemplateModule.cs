@@ -1,57 +1,71 @@
 ﻿using Nancy;
 using Nancy.ModelBinding;
 using MailPimp.Mail;
+using MailPimp.Templates;
 
 namespace MailPimp
 {
 	public class TemplateModule : NancyModule
 	{
-		public TemplateModule()
+		readonly IMailSender sender;
+		readonly ITemplateEngine engine;
+
+		public TemplateModule(IMailSender sender, ITemplateEngine engine)
 			: base("/templates")
 		{
-			//Get["/"] = parameters => {
-			//    return Response.AsJson(new {Name = "Nancy"});
-			//};
-			//Get["/{Name}"] = parameters => {
-			//    return Response.AsJson(new {parameters.Name});
-			//};
+			this.engine = engine;
+			this.sender = sender;
+
+			Get["/"] = parameters => {
+				return Response.AsJson(engine.GetTemplateLocations());
+			};
+//			Get["/{Name}"] = parameters => {
+//			    return Response.AsJson(new {parameters.Name});
+//			};
 			Post["/{Name}/deliver"] = parameters => {
 				string template = parameters.Name;
-				var model = this.Bind<DeliveryModel>();
+				var model = this.Bind<TemplateModel>();
 				Sender.Send(GetMailbag(template, model));
 				return HttpStatusCode.OK;
 			};
 			Post["/{Name}/mailbag"] = parameters => {
 				string template = parameters.Name;
-				var model = this.Bind<DeliveryModel>();
+				var model = this.Bind<TemplateModel>();
 				return Response.AsJson(GetMailbag(template, model));
 			};
 			Post["/{Name}/display"] = parameters => {
 				string template = parameters.Name;
-				var model = this.Bind<DeliveryModel>();
-				return View[template, model];
+				var model = this.Bind<TemplateModel>();
+				return Template[template, model];
 			};
 		}
 
-		static IMailSender Sender
+		public IMailSender Sender
 		{
-			get
-			{
-				return new MailSender();
-			}
+			get { return sender; }
 		}
 
-		Mailbag GetMailbag(string template, DeliveryModel delivery)
+		public ITemplateEngine Engine
 		{
-			var mailbag = new Mailbag(delivery.From, delivery.To, delivery.Subject);
+			get { return engine; }
+		}
 
-			using (var buffer = new TextStream())
-			{
-				View[template, delivery].Invoke(buffer);
-				mailbag.Contents = buffer.ToString();
-			}
+		public TemplateRenderer Template
+		{
+			get { return new TemplateRenderer(this); }
+		}
 
-			return mailbag;
+		Mailbag GetMailbag(string template, TemplateModel delivery)
+		{
+		    var mailbag = new Mailbag(delivery.From, delivery.To, delivery.Subject);
+
+		    using (var buffer = new TextStream())
+		    {
+		        Template[template, delivery].Invoke(buffer);
+		        mailbag.Contents = buffer.ToString();
+		    }
+
+		    return mailbag;
 		}
 	}
 }

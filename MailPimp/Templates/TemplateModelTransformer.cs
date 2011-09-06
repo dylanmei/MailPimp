@@ -1,30 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
-using KeyValueDictionary = System.Collections.Generic.IDictionary<string, object>;
 
-namespace MailPimp
+namespace MailPimp.Templates
 {
-	public class DeliveryModelBinder : DynamicModelBinder
-	{
-		static readonly IDynamicModelTransformer Transformer = new DeliveryModelTransformer();
-
-		protected override IDynamicModelTransformer GetModelTransformer()
-		{
-			return Transformer;
-		}
-
-		public override bool CanBind(Type modelType)
-		{
-			return typeof(DeliveryModel) == modelType || base.CanBind(modelType);
-		}
-	}
-
-	public class DeliveryModelTransformer : IDynamicModelTransformer
+	public class TemplateModelTransformer : IDynamicModelTransformer
 	{
 		public object Transform(dynamic source)
 		{
-			var model = new DeliveryModel();
+			var model = new TemplateModel();
 			if (!HasMember(source, "Model")) model.Model = model;
 			else
 			{
@@ -35,12 +18,12 @@ namespace MailPimp
 			return model;
 		}
 
-		static void BindModel(dynamic source, DeliveryModel model)
+		static void BindModel(dynamic source, TemplateModel model)
 		{
 			model.Model = source.Model;
 		}
 
-		static void BindHeaders(dynamic source, DeliveryModel model)
+		static void BindHeaders(dynamic source, TemplateModel model)
 		{
 			if (HasMember(source, "Subject"))
 				model.Subject = source.Subject;
@@ -71,7 +54,7 @@ namespace MailPimp
 		{
 			if (@object is ExpandoObject)
 			{
-				return ((KeyValueDictionary) @object).ContainsKey(name);
+				return ((IDictionary<string, object>) @object).ContainsKey(name);
 			}
 			return false;
 		}
@@ -80,7 +63,7 @@ namespace MailPimp
 		{
 			if (HasMember(@object, name))
 			{
-				return ((KeyValueDictionary) @object)[name] is IEnumerable<object>;
+				return ((IDictionary<string, object>) @object)[name] is IEnumerable<object>;
 			}
 			return false;
 		}

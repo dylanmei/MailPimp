@@ -2,7 +2,7 @@
 using System.Linq;
 using KeyValueDictionary = System.Collections.Generic.IDictionary<string, object>;
 
-namespace MailPimp.ViewEngine
+namespace MailPimp.Templates
 {
     public class DescriptorParameters
     {

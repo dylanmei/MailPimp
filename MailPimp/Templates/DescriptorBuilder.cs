@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Nancy.ViewEngines;
 using Spark;
 using Spark.Parser;
 using Spark.Parser.Syntax;
 
-namespace MailPimp.ViewEngine
+namespace MailPimp.Templates
 {
 	public interface IDescriptorBuilder
     {
@@ -14,9 +14,9 @@ namespace MailPimp.ViewEngine
         /// Implemented by custom descriptor builder to quickly extract additional parameters needed
         /// to locate templates, like the theme or language in effect for the request
         /// </summary>
-        /// <param name="viewLocationResult">Context information for the current request</param>
+        /// <param name="templateLocation">Context information for the current request</param>
         /// <returns>An in-order array of values which are meaningful to BuildDescriptor on the same implementation class</returns>
-        IDictionary<string, object> GetExtraParameters(ViewLocationResult viewLocationResult);
+        IDictionary<string, object> GetExtraParameters(TemplateLocation templateLocation);
 
         /// <summary>
         /// Given a set of MVC-specific parameters, a descriptor for the target view is created. This can
@@ -28,28 +28,7 @@ namespace MailPimp.ViewEngine
         SparkViewDescriptor BuildDescriptor(DescriptorParameters buildDescriptorParams, ICollection<string> searchedLocations);
     }
 
-	public interface IDescriptorFilter
-    {
-        /// <summary>
-        /// Called frequently to extract filter-specific parameters from a request viewLocationResult. This call
-        /// happens on every request so should be implemented as efficiently as possible.
-        /// </summary>
-        /// <param name="viewLocationResult">The current request's action viewLocationResult</param>
-        /// <param name="extra">Dictionary where additional parameters should be added</param>
-        void ExtraParameters(ViewLocationResult viewLocationResult, IDictionary<string, object> extra);
-
-        /// <summary>
-        /// The DefaultDescriptorBuider calls this method for the filter to return a modified enumerable
-        /// ordered list of potential template locations. This is called only when the unique combination of action,
-        /// master, view, and extra have not been resolved previously.
-        /// </summary>
-        /// <param name="locations">incoming ordered list of locations</param>
-        /// <param name="extra">extra parameters which have been extracted</param>
-        /// <returns>either the original list or a new, augmented, enumerable list</returns>
-        IEnumerable<string> PotentialLocations(IEnumerable<string> locations, IDictionary<string, object> extra);
-    }
-
-    public class DescriptorBuilder : IDescriptorBuilder
+	public class DescriptorBuilder : IDescriptorBuilder
     {
         private ISparkViewEngine engine;
         private MasterGrammar grammar;
@@ -85,12 +64,12 @@ namespace MailPimp.ViewEngine
             grammar = new MasterGrammar(engine.Settings.Prefix);
         }
 
-        public virtual IDictionary<string, object> GetExtraParameters(ViewLocationResult viewLocationResult)
+        public virtual IDictionary<string, object> GetExtraParameters(TemplateLocation templateLocation)
         {
             var extra = new Dictionary<string, object>();
             foreach (var filter in Filters)
             {
-                filter.ExtraParameters(viewLocationResult, extra);
+                filter.ExtraParameters(templateLocation, extra);
             }
 
             return extra;
@@ -160,7 +139,8 @@ namespace MailPimp.ViewEngine
             ICollection<string> descriptorTemplates,
             ICollection<string> searchedLocations)
         {
-            var template = potentialTemplates.FirstOrDefault(t => engine.ViewFolder.HasView(t));
+            var template = potentialTemplates
+				.FirstOrDefault(t => engine.ViewFolder.HasView(t));
             if (template != null)
             {
                 descriptorTemplates.Add(template);
@@ -187,25 +167,32 @@ namespace MailPimp.ViewEngine
         protected virtual IEnumerable<string> PotentialViewLocations(string viewPath, string viewName, IDictionary<string, object> extra)
         {
             return ApplyFilters(new[] {
-                Path.Combine(viewPath, viewName + ".spark"),
-                Path.Combine("Shared", viewName + ".spark")
+                CombinePath(viewPath, viewName + ".spark"),
+                CombinePath("Shared", viewName + ".spark")
             }, extra);
         }
 
         protected virtual IEnumerable<string> PotentialMasterLocations(string masterName, IDictionary<string, object> extra)
         {
             return ApplyFilters(new[] {
-				Path.Combine("Layouts", masterName + ".spark"),
-				Path.Combine("Shared", masterName + ".spark")
+				CombinePath("Layouts", masterName + ".spark"),
+				CombinePath("Shared", masterName + ".spark")
 			}, extra);
         }
 
         protected virtual IEnumerable<string> PotentialDefaultMasterLocations(string controllerName, IDictionary<string, object> extra)
         {
             return ApplyFilters(new[] {
-                Path.Combine("Layouts", "Application.spark"),
-                Path.Combine("Shared", "Application.spark")
+                CombinePath("Layouts", "Application.spark"),
+                CombinePath("Shared", "Application.spark")
             }, extra);
         }
+
+		static string CombinePath(string filePath, string fileName)
+		{
+			return string.IsNullOrEmpty(filePath)
+				? fileName
+				: string.Concat(filePath, "/", fileName);
+		}
     }
 }
