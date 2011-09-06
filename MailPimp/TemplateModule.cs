@@ -2,6 +2,7 @@
 using Nancy.ModelBinding;
 using MailPimp.Mail;
 using MailPimp.Templates;
+using System.Linq;
 
 namespace MailPimp
 {
@@ -17,7 +18,10 @@ namespace MailPimp
 			this.sender = sender;
 
 			Get["/"] = parameters => {
-				return Response.AsJson(engine.GetTemplateLocations());
+				return View["templates", new {
+					Templates = engine.GetTemplateLocations()
+						.OrderBy(t => t.Path)
+				}];
 			};
 //			Get["/{Name}"] = parameters => {
 //			    return Response.AsJson(new {parameters.Name});

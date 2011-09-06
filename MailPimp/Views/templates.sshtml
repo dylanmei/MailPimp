@@ -1,0 +1,15 @@
+﻿<html>
+	<head>
+		<title>MailPimp</title>
+	</head>
+	<body>
+		<img src="/content/logo.png" />
+		<p></p>
+		<p>Templates:</p>
+		<ul>
+		@Each.Templates
+			<li>@Current.Path</li>
+		@EndEach
+		</ul>
+	</body>
+</html>
