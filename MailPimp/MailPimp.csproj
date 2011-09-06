@@ -123,8 +123,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Data\Bucket.config.example" />
-    <None Include="Views\index.sshtml" />
-    <None Include="Views\templates.sshtml" />
+    <Content Include="Views\index.sshtml" />
+    <Content Include="Views\templates.sshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
