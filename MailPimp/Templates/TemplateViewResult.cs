@@ -2,7 +2,7 @@
 
 namespace MailPimp.Templates
 {
-    class TemplateViewResult
+    public class TemplateViewResult
     {
         public TemplateView View { get; set; }
 

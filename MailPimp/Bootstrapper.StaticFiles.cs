@@ -7,7 +7,7 @@ using Nancy.Responses;
 
 namespace MailPimp
 {
-	public class Configure : DefaultNancyBootstrapper
+	public partial class Bootstrapper
 	{
 		static readonly IDictionary<string, string> StaticFileExtensions = new Dictionary<string, string> {
 			{ "jpg", "image/jpeg" },
@@ -16,12 +16,6 @@ namespace MailPimp
 			{ "css", "text/css" },
 			{ "js",  "text/javascript" }
 		};
-
-		protected override void InitialiseInternal(TinyIoC.TinyIoCContainer container)
-		{
-			base.InitialiseInternal(container);
-			ConfigureStaticFiles(container);
-		}
 
 		void ConfigureStaticFiles(TinyIoC.TinyIoCContainer container)
 		{

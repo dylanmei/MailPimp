@@ -5,11 +5,11 @@ using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
-	public class Template : IViewFile
+	public class TemplateFile : IViewFile
 	{
 		readonly TemplateLocation location;
 
-		public Template(TemplateLocation location)
+		public TemplateFile(TemplateLocation location)
 		{
 			this.location = location;
 		}

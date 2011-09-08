@@ -7,7 +7,7 @@ using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
-	public interface ITemplateRepository : IViewFolder
+	public interface ITemplateRepository
 	{
 		IEnumerable<TemplateLocation> Locations { get; }
 	}
@@ -17,9 +17,15 @@ namespace MailPimp.Templates
 		readonly static Uri BucketUri = new Uri(BucketConfig.GetValue());
 		readonly static Uri TemplatesUri = new Uri(BucketUri, "templates/");
 
+		IEnumerable<TemplateLocation> locations;
+
 		public IEnumerable<TemplateLocation> Locations
 		{
-			get { return GetTemplateLocations(BucketUri, new[] { "spark" }); }
+			get
+			{
+				return locations ?? (locations = GetTemplateLocations(BucketUri, new[] {"spark"}));
+//				return GetTemplateLocations(BucketUri, new[] { "spark" });
+			}
 		}
 
 		static IEnumerable<TemplateLocation> GetTemplateLocations(Uri baseUri, IEnumerable<string> supportedExtensions)
@@ -55,37 +61,6 @@ namespace MailPimp.Templates
 		static string GetLocalTemplatePathFromBucketKey(string key)
 		{
 			return key.Replace("templates/", "");
-		}
-
-		public IList<string> ListViews(string path)
-		{
-			return Locations
-				.Where(l => IsTemplateInDirectory(l, path))
-				.Select(l => l.Name).ToList();
-		}
-
-		public bool HasView(string path)
-		{
-			return Locations.Any(l => IsTemplateAtPath(l, path));
-		}
-
-		static bool IsTemplateInDirectory(TemplateLocation location, string path)
-		{
-			if (path.Contains(@"\")) path = path.Replace(@"\", "/");
-			return string.Compare(path, location.Directory, StringComparison.InvariantCultureIgnoreCase) == 0;
-		}
-
-		static bool IsTemplateAtPath(TemplateLocation location, string path)
-		{
-			if (path.Contains(@"\")) path = path.Replace(@"\", "/");
-			return string.Compare(path, location.Path, StringComparison.InvariantCultureIgnoreCase) == 0;
-		}
-
-		public IViewFile GetViewSource(string path)
-		{
-			if (!HasView(path))
-				throw new TemplateNotFoundException(path);
-			return new Template(Locations.First(l => IsTemplateAtPath(l, path)));
 		}
 	}
 

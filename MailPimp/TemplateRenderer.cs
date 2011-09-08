@@ -8,18 +8,18 @@ namespace MailPimp
 {
 	public class TemplateRenderer : IHideObjectMembers
 	{
-		private readonly TemplateModule module;
+		private readonly ITemplateBuilder builder;
 
-		public TemplateRenderer(TemplateModule module)
+		public TemplateRenderer(ITemplateBuilder builder)
 		{
-			this.module = module;
+			this.builder = builder;
 		}
 
 		public Action<Stream> this[string templateName, TemplateModel model]
 		{
 			get
 			{
-				return module.Engine.RenderTemplate(templateName, model);
+				return builder.RenderTemplate(templateName, model);
 			}
 		}
 	}

@@ -8,18 +8,16 @@ namespace MailPimp
 {
 	public class TemplateModule : NancyModule
 	{
-		readonly IMailSender sender;
-		readonly ITemplateEngine engine;
+		readonly ITemplateBuilder builder;
 
-		public TemplateModule(IMailSender sender, ITemplateEngine engine)
+		public TemplateModule(ITemplateBuilder builder, ITemplateRepository templates, IMailSender sender)
 			: base("/templates")
 		{
-			this.engine = engine;
-			this.sender = sender;
+			this.builder = builder;
 
 			Get["/"] = parameters => {
 				return View["templates", new {
-					Templates = engine.GetTemplateLocations()
+					Templates = templates.Locations
 						.OrderBy(t => t.Path)
 				}];
 			};
@@ -29,7 +27,7 @@ namespace MailPimp
 			Post["/{Name}/deliver"] = parameters => {
 				string template = parameters.Name;
 				var model = this.Bind<TemplateModel>();
-				Sender.Send(GetMailbag(template, model));
+				sender.Send(GetMailbag(template, model));
 				return HttpStatusCode.OK;
 			};
 			Post["/{Name}/mailbag"] = parameters => {
@@ -44,19 +42,9 @@ namespace MailPimp
 			};
 		}
 
-		public IMailSender Sender
+		TemplateRenderer Template
 		{
-			get { return sender; }
-		}
-
-		public ITemplateEngine Engine
-		{
-			get { return engine; }
-		}
-
-		public TemplateRenderer Template
-		{
-			get { return new TemplateRenderer(this); }
+			get { return new TemplateRenderer(builder); }
 		}
 
 		Mailbag GetMailbag(string template, TemplateModel delivery)

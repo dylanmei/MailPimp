@@ -75,7 +75,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configure.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Bootstrapper.StaticFiles.cs" />
     <Compile Include="DynamicModelBinder.cs" />
     <Compile Include="DynamicModelTransformer.cs" />
     <Compile Include="Address.cs" />
@@ -91,7 +92,9 @@
     <Compile Include="Templates\MasterGrammar.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Templates\Template.cs" />
+    <Compile Include="Templates\TemplateFile.cs" />
+    <Compile Include="Templates\TemplateBuilder.cs" />
+    <Compile Include="Templates\TemplateEngine.cs" />
     <Compile Include="Templates\TemplateModel.cs" />
     <Compile Include="HomeModule.cs" />
     <Compile Include="Mail\Mail.cs" />
@@ -99,8 +102,6 @@
     <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateModule.cs" />
-    <Compile Include="Templates\Bootstrapper.cs" />
-    <Compile Include="Templates\TemplateEngine.cs" />
     <Compile Include="Templates\TemplateLocation.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -109,6 +110,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Templates\TemplateModelTransformer.cs" />
+    <Compile Include="Templates\TemplateFileFinder.cs" />
     <Compile Include="Templates\TemplateView.cs">
       <SubType>Code</SubType>
     </Compile>
