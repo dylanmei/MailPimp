@@ -92,6 +92,7 @@
     <Compile Include="Templates\MasterGrammar.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Templates\StorageClient.cs" />
     <Compile Include="Templates\TemplateFile.cs" />
     <Compile Include="Templates\TemplateBuilder.cs" />
     <Compile Include="Templates\TemplateEngine.cs" />

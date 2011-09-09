@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Xml.Linq;
-using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
@@ -17,7 +15,13 @@ namespace MailPimp.Templates
 		readonly static Uri BucketUri = new Uri(BucketConfig.GetValue());
 		readonly static Uri TemplatesUri = new Uri(BucketUri, "templates/");
 
+		readonly IStorageClient client;
 		IEnumerable<TemplateLocation> locations;
+
+		public TemplateRepository(IStorageClient client)
+		{
+			this.client = client;
+		}
 
 		public IEnumerable<TemplateLocation> Locations
 		{
@@ -28,26 +32,17 @@ namespace MailPimp.Templates
 			}
 		}
 
-		static IEnumerable<TemplateLocation> GetTemplateLocations(Uri baseUri, IEnumerable<string> supportedExtensions)
+		IEnumerable<TemplateLocation> GetTemplateLocations(Uri baseUri, IEnumerable<string> supportedExtensions)
 		{
-			var client = new WebClient();
+			var index = client.Read(baseUri);
+			var bucket = XElement.Parse(index);
+			var elements =
+				from content in bucket.Elements2("Contents")
+				where content.Element2("Size").Value != "0"
+				select NewTemplateLocationFromBucketElement(content);
 
-			using (var stream = client.OpenRead(baseUri))
-			{
-				if (stream != null)
-				{
-					var bucket = XElement.Load(stream);
-					var elements =
-						from content in bucket.Elements2("Contents")
-						where content.Element2("Size").Value != "0"
-						select NewTemplateLocationFromBucketElement(content);
-
-					return elements.Where(c =>
-						supportedExtensions.Contains(c.Extension));
-				}
-			}
-
-			return new TemplateLocation[0];
+			return elements.Where(c =>
+				supportedExtensions.Contains(c.Extension));
 		}
 
 		static TemplateLocation NewTemplateLocationFromBucketElement(XElement element)
