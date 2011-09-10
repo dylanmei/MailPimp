@@ -9,11 +9,13 @@ namespace MailPimp
 	public class TemplateModule : NancyModule
 	{
 		readonly ITemplateBuilder builder;
+		readonly ITemplateRepository templates;
 
 		public TemplateModule(ITemplateBuilder builder, ITemplateRepository templates, IMailSender sender)
 			: base("/templates")
 		{
 			this.builder = builder;
+			this.templates = templates;
 
 			Get["/"] = parameters => {
 				return View["templates", new {
@@ -25,26 +27,23 @@ namespace MailPimp
 //			    return Response.AsJson(new {parameters.Name});
 //			};
 			Post["/{Name}/deliver"] = parameters => {
-				string template = parameters.Name;
 				var model = this.Bind<TemplateModel>();
-				sender.Send(GetMailbag(template, model));
+				sender.Send(GetMailbag((string)parameters.Name, model));
 				return HttpStatusCode.OK;
 			};
 			Post["/{Name}/mailbag"] = parameters => {
-				string template = parameters.Name;
 				var model = this.Bind<TemplateModel>();
-				return Response.AsJson(GetMailbag(template, model));
+				return Response.AsJson(GetMailbag((string)parameters.Name, model));
 			};
 			Post["/{Name}/display"] = parameters => {
-				string template = parameters.Name;
 				var model = this.Bind<TemplateModel>();
-				return Template[template, model];
+				return Template[parameters.Name, model];
 			};
 		}
 
 		TemplateRenderer Template
 		{
-			get { return new TemplateRenderer(builder); }
+			get { return new TemplateRenderer(builder, templates); }
 		}
 
 		Mailbag GetMailbag(string template, TemplateModel delivery)

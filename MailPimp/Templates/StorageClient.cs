@@ -20,6 +20,11 @@ namespace MailPimp.Templates
 
 		public string Read(Uri address, Encoding encoding)
 		{
+			return ReadResource(address, encoding);
+		}
+
+		protected virtual string ReadResource(Uri address, Encoding encoding)
+		{
 			var contents = "";
 			var client = new WebClient();
 			using (var stream = client.OpenRead(address))

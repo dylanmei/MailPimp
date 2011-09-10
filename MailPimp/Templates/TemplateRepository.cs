@@ -28,7 +28,6 @@ namespace MailPimp.Templates
 			get
 			{
 				return locations ?? (locations = GetTemplateLocations(BucketUri, new[] {"spark"}));
-//				return GetTemplateLocations(BucketUri, new[] { "spark" });
 			}
 		}
 

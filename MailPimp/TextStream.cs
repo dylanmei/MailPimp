@@ -14,6 +14,16 @@ namespace MailPimp
 			builder = new StringBuilder();
 		}
 
+		public override void Write(byte[] buffer, int offset, int count)
+		{
+			builder.Append(encoding.GetString(buffer, offset, count));
+		}
+		
+		public override string ToString()
+		{
+			return builder.ToString();
+		}
+
 		public override bool CanRead
 		{
 			get { return false; }
@@ -49,11 +59,6 @@ namespace MailPimp
 			throw new NotSupportedException();
 		}
 
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-			builder.Append(encoding.GetString(buffer, offset, count));
-		}
-		
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			throw new NotSupportedException();
@@ -62,11 +67,6 @@ namespace MailPimp
 		public override void SetLength(long value)
 		{
 			throw new NotSupportedException();
-		}
-
-		public override string ToString()
-		{
-			return builder.ToString();
 		}
 	}
 }

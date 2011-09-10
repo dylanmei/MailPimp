@@ -1,39 +1,34 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 
 namespace MailPimp.Templates
 {
 	public interface ITemplateBuilder
 	{
-		Action<Stream> RenderTemplate(string templateName, TemplateModel model);
+		Action<Stream> RenderTemplate(ITemplateFileFinder finder, TemplateLocation location, TemplateModel model);
 	}
 
 	public class TemplateBuilder : ITemplateBuilder
 	{
-		readonly ITemplateRepository templates;
 		readonly ITemplateEngine engine;
 		static readonly Action<Stream> EmptyView = x => {};
 
-		public TemplateBuilder(ITemplateEngine engine, ITemplateRepository templates)
+		public TemplateBuilder(ITemplateEngine engine)
 		{
 			this.engine = engine;
-			this.templates = templates;
 		}
 
-		public Action<Stream> RenderTemplate(string templateName, TemplateModel model)
+		public Action<Stream> RenderTemplate(ITemplateFileFinder finder, TemplateLocation location, TemplateModel model)
 		{
-			var location = templates.Locations
-				.FirstOrDefault(l => l.Name == templateName);
 			return location == null
 				? EmptyView
-				: RenderView(location, model);
+				: RenderView(finder, location, model);
 		}
 
-		Action<Stream> RenderView(TemplateLocation location, TemplateModel model)
+		Action<Stream> RenderView(ITemplateFileFinder finder, TemplateLocation location, TemplateModel model)
 		{
             return stream => {
-                var result = engine.CreateView(location);
+                var result = engine.CreateView(finder, location);
                 using (var writer = new StreamWriter(stream))
                 {
 					result.View.Bind(model);

@@ -5,38 +5,35 @@ namespace MailPimp.Templates
 {
 	public interface ITemplateEngine
 	{
-		TemplateViewResult CreateView(TemplateLocation location);
+		TemplateViewResult CreateView(ITemplateFileFinder finder, TemplateLocation location);
 	}
 
 	public class TemplateEngine : ITemplateEngine
 	{
-        readonly IDescriptorBuilder descriptorBuilder;
         readonly ISparkViewEngine engine;
-        readonly ISparkSettings settings;
+        readonly IDescriptorBuilder descriptorBuilder;
 
-		public TemplateEngine(ITemplateFileFinder fileFinder)
+		public TemplateEngine()
 		{
-			settings = new SparkSettings {
+			engine = new SparkViewEngine(new SparkSettings {
 				PageBaseType = typeof (TemplateView).FullName,
-			};
-			engine = new SparkViewEngine(settings) {
-				ViewFolder = fileFinder
-			};
+			});
 			descriptorBuilder = new DescriptorBuilder(engine);
 		}
 
-		public TemplateViewResult CreateView(TemplateLocation location)
+		public TemplateViewResult CreateView(ITemplateFileFinder finder, TemplateLocation location)
 		{
         	var viewPath = location.Directory;
         	var viewName = location.Name;
             var searchedLocations = new List<string>();
             var descriptorParams = new DescriptorParameters(
-                GetNamespaceEncodedPathViewPath(viewPath),
+                viewPath,
                 viewName,
                 null,
                 true,
                 null);
 
+			engine.ViewFolder = finder;
             var descriptor = descriptorBuilder.BuildDescriptor(
                 descriptorParams, searchedLocations);
 
@@ -45,18 +42,8 @@ namespace MailPimp.Templates
 
             var entry = engine.CreateEntry(descriptor);
             var view = entry.CreateInstance() as TemplateView;
-			//if (view != null)
-			//{
-			//    view.RenderContext = renderContext;
-			//}
 
             return new TemplateViewResult(view);			
 		}
-
-		static string GetNamespaceEncodedPathViewPath(string viewPath)
-		{
-		    //return viewPath.Replace('/', '_');
-			return viewPath;
-		}		
 	}
 }
