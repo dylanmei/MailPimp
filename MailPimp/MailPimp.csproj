@@ -81,6 +81,7 @@
     <Compile Include="DynamicModelTransformer.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="TemplateRenderer.cs" />
+    <Compile Include="Templates\BucketClient.cs" />
     <Compile Include="Templates\BucketConfig.cs" />
     <Compile Include="Templates\DescriptorBuilder.cs">
       <SubType>Code</SubType>

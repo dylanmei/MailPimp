@@ -44,9 +44,9 @@ namespace MailPimp.Templates
 				supportedExtensions.Contains(c.Extension));
 		}
 
-		static TemplateLocation NewTemplateLocationFromBucketElement(XElement element)
+		TemplateLocation NewTemplateLocationFromBucketElement(XElement element)
 		{
-			return new TemplateLocation(TemplatesUri) {
+			return new TemplateLocation(TemplatesUri, client) {
 				Path = GetLocalTemplatePathFromBucketKey(element.Element2("Key").Value),
 				LastModified = DateTime.Parse(element.Element2("LastModified").Value)
 			};

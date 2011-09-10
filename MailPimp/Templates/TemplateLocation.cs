@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using PathHelper = System.IO.Path;
 
 namespace MailPimp.Templates
@@ -6,10 +7,17 @@ namespace MailPimp.Templates
 	public class TemplateLocation
 	{
 		readonly Uri BaseUri;
+		readonly IStorageClient client;
 
-		public TemplateLocation(Uri baseUri)
+		public TemplateLocation(Uri baseUri, IStorageClient client)
 		{
 			BaseUri = baseUri;
+			this.client = client;
+		}
+
+		public string GetSource()
+		{
+			return client.Read(Uri, Encoding.UTF8);
 		}
 
 		public string Path { get; set; }

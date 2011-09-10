@@ -15,8 +15,7 @@ namespace MailPimp.Templates
 
 		public Stream OpenViewStream()
 		{
-			var client = new StorageClient();
-			var contents = client.Read(location.Uri, Encoding.UTF8);
+			var contents = location.GetSource();
 			return new MemoryStream(Encoding.UTF8.GetBytes(contents));
 		}
 
