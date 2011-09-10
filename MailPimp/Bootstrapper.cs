@@ -14,6 +14,7 @@ namespace MailPimp
 		protected override void ConfigureRequestContainer(TinyIoC.TinyIoCContainer container)
 		{
 			base.ConfigureRequestContainer(container);
+			container.Register<ITemplateBuilder, TemplateBuilder>().AsSingleton();
 			container.Register<ITemplateRepository, TemplateRepository>().AsSingleton();
 		}
 	}

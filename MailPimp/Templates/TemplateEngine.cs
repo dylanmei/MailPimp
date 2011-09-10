@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Spark;
+using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
@@ -27,11 +28,7 @@ namespace MailPimp.Templates
         	var viewName = location.Name;
             var searchedLocations = new List<string>();
             var descriptorParams = new DescriptorParameters(
-                viewPath,
-                viewName,
-                null,
-                true,
-                null);
+                viewPath, viewName, null, true, null);
 
 			engine.ViewFolder = finder;
             var descriptor = descriptorBuilder.BuildDescriptor(

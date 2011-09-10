@@ -9,17 +9,15 @@ namespace MailPimp
 	public class TemplateModule : NancyModule
 	{
 		readonly ITemplateBuilder builder;
-		readonly ITemplateRepository templates;
 
-		public TemplateModule(ITemplateBuilder builder, ITemplateRepository templates, IMailSender sender)
+		public TemplateModule(ITemplateBuilder builder, IMailSender sender)
 			: base("/templates")
 		{
 			this.builder = builder;
-			this.templates = templates;
 
 			Get["/"] = parameters => {
 				return View["templates", new {
-					Templates = templates.Locations
+					Templates = builder.Templates
 						.OrderBy(t => t.Path)
 				}];
 			};
@@ -43,7 +41,7 @@ namespace MailPimp
 
 		TemplateRenderer Template
 		{
-			get { return new TemplateRenderer(builder, templates); }
+			get { return new TemplateRenderer(builder); }
 		}
 
 		Mailbag GetMailbag(string template, TemplateModel delivery)
