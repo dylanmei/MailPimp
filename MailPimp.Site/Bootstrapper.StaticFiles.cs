@@ -17,34 +17,31 @@ namespace MailPimp
 			{ "js",  "text/javascript" }
 		};
 
-		void ConfigureStaticFiles(TinyIoC.TinyIoCContainer container)
+		void ConfigureStaticFiles()
 		{
             BeforeRequest += ctx =>
             {
-                var rootPathProvider =
-                    container.Resolve<IRootPathProvider>();
+				var pathProvider = Resolve<IRootPathProvider>();
+				var extension = Path.GetExtension(ctx.Request.Path);
 
-                var requestedExtension =
-                    Path.GetExtension(ctx.Request.Path);
+				if (!string.IsNullOrEmpty(extension))
+				{
+				    var extensionWithoutDot =
+				        extension.Substring(1);
 
-                if (!string.IsNullOrEmpty(requestedExtension))
-                {
-                    var extensionWithoutDot =
-                        requestedExtension.Substring(1);
+				    if (StaticFileExtensions.Keys.Any(x =>
+				        x.Equals(extensionWithoutDot, StringComparison.InvariantCultureIgnoreCase)))
+				    {
+				        var fileName = Path.GetFileName(ctx.Request.Path);
+				        if (fileName == null)
+				            return null;
 
-                    if (StaticFileExtensions.Keys.Any(x =>
-						x.Equals(extensionWithoutDot, StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        var fileName = Path.GetFileName(ctx.Request.Path);
-                        if (fileName == null)
-                            return null;
-
-                        var filePath = Path.Combine(rootPathProvider.GetRootPath(), "content", fileName);
-                        return !File.Exists(filePath)
-							? null
-							: new GenericFileResponse(filePath, StaticFileExtensions[extensionWithoutDot]);
-                    }
-                }
+				        var filePath = Path.Combine(pathProvider.GetRootPath(), "content", fileName);
+				        return !File.Exists(filePath)
+				            ? null
+				            : new GenericFileResponse(filePath, StaticFileExtensions[extensionWithoutDot]);
+				    }
+				}
 
                 return null;
             };

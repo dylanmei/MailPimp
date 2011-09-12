@@ -33,18 +33,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.2.5.2.830\lib\NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.2.5.2.830\lib\NET40\Autofac.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.0.7.1\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Bootstrappers.Autofac">
+      <HintPath>..\packages\Nancy.Bootstrappers.Autofac.0.7.1\lib\net40\Nancy.Bootstrappers.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>..\packages\Nancy.Hosting.Aspnet.0.7.1\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Spark">
-      <HintPath>..\packages\Spark.1.6\lib\NET40\Spark.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -77,46 +83,16 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Bootstrapper.StaticFiles.cs" />
+    <Compile Include="BucketConfig.cs" />
     <Compile Include="DynamicModelBinder.cs" />
     <Compile Include="DynamicModelTransformer.cs" />
+    <Compile Include="TemplateModelBinder.cs" />
+    <Compile Include="TemplateModelTransformer.cs" />
     <Compile Include="TemplateRenderer.cs" />
-    <Compile Include="Templates\BucketClient.cs" />
-    <Compile Include="Templates\BucketConfig.cs" />
-    <Compile Include="Templates\DescriptorBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Templates\DescriptorFilter.cs" />
-    <Compile Include="Templates\DescriptorParameters.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Templates\MasterGrammar.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Templates\StorageClient.cs" />
-    <Compile Include="Templates\TemplateFile.cs" />
-    <Compile Include="Templates\TemplateBuilder.cs" />
-    <Compile Include="Templates\TemplateEngine.cs" />
-    <Compile Include="Templates\TemplateModel.cs" />
     <Compile Include="HomeModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateModule.cs" />
-    <Compile Include="Templates\TemplateLocation.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Templates\TemplateNotFoundException.cs" />
-    <Compile Include="Templates\TemplateRepository.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Templates\TemplateModelTransformer.cs" />
-    <Compile Include="Templates\TemplateFileFinder.cs" />
-    <Compile Include="Templates\TemplateView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TextStream.cs" />
-    <Compile Include="Templates\TemplateModelBinder.cs" />
-    <Compile Include="Templates\TemplateViewResult.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

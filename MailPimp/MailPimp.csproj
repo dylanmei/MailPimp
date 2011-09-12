@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Spark">
+      <HintPath>..\packages\Spark.1.6\lib\NET40\Spark.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,13 +48,32 @@
     <Compile Include="Mail\Mailbag.cs" />
     <Compile Include="Mail\MailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\AmazonRepository.cs" />
+    <Compile Include="Storage\AmazonTemplate.cs" />
+    <Compile Include="Storage\Extensions.cs" />
+    <Compile Include="Templates\DescriptorBuilder.cs" />
+    <Compile Include="Templates\DescriptorFilter.cs" />
+    <Compile Include="Templates\DescriptorParameters.cs" />
+    <Compile Include="Templates\MasterGrammar.cs" />
+    <Compile Include="Templates\TemplateBuilder.cs" />
+    <Compile Include="Templates\TemplateEngine.cs" />
+    <Compile Include="Templates\TemplateViewFile.cs" />
+    <Compile Include="Templates\TemplateViewFolder.cs" />
+    <Compile Include="Templates\Template.cs" />
+    <Compile Include="Templates\TemplateModel.cs" />
+    <Compile Include="Templates\TemplateNotFoundException.cs" />
+    <Compile Include="Templates\TemplateRepository.cs" />
+    <Compile Include="Templates\TemplateView.cs" />
+    <Compile Include="Templates\TemplateViewResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
+    <Exec Command="&quot;$(SolutionDir)packages\nuget&quot; i &quot;$(ProjectDir)packages.config&quot; -o &quot;$(SolutionDir)packages&quot;" />
   </Target>
+  <!--
   <Target Name="AfterBuild">
   </Target>
   -->

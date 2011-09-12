@@ -7,7 +7,7 @@ namespace MailPimp.Templates
 {
 	public interface ITemplateBuilder
 	{
-		IEnumerable<TemplateLocation> Templates { get; }
+		IEnumerable<Template> Templates { get; }
 		Action<Stream> RenderTemplate(string templateName, TemplateModel model);
 	}
 
@@ -23,12 +23,12 @@ namespace MailPimp.Templates
 			this.templates = templates;
 		}
 
-		public IEnumerable<TemplateLocation> Templates
+		public IEnumerable<Template> Templates
 		{
 			get
 			{
-				return templates.Locations
-					.Where(l => l.Directory == "");
+				return templates.Templates
+					.Where(l => l.Folder == "");
 			}
 		}
 
@@ -42,10 +42,10 @@ namespace MailPimp.Templates
 				: RenderView(location, model);
 		}
 
-		Action<Stream> RenderView(TemplateLocation location, TemplateModel model)
+		Action<Stream> RenderView(Template location, TemplateModel model)
 		{
             return stream => {
-                var result = engine.CreateView(new TemplateFileFinder(templates), location);
+                var result = engine.CreateView(new TemplateViewFolder(templates), location);
                 using (var writer = new StreamWriter(stream))
                 {
 					result.View.Bind(model);

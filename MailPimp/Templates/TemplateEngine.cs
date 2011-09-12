@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Spark;
-using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
 	public interface ITemplateEngine
 	{
-		TemplateViewResult CreateView(ITemplateFileFinder finder, TemplateLocation location);
+		TemplateViewResult CreateView(ITemplateViewFolder finder, Template template);
 	}
 
 	public class TemplateEngine : ITemplateEngine
@@ -22,10 +21,10 @@ namespace MailPimp.Templates
 			descriptorBuilder = new DescriptorBuilder(engine);
 		}
 
-		public TemplateViewResult CreateView(ITemplateFileFinder finder, TemplateLocation location)
+		public TemplateViewResult CreateView(ITemplateViewFolder finder, Template template)
 		{
-        	var viewPath = location.Directory;
-        	var viewName = location.Name;
+        	var viewPath = template.Folder;
+        	var viewName = template.Name;
             var searchedLocations = new List<string>();
             var descriptorParams = new DescriptorParameters(
                 viewPath, viewName, null, true, null);

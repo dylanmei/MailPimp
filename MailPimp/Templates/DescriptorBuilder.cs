@@ -12,9 +12,9 @@ namespace MailPimp.Templates
 		/// Implemented by custom descriptor builder to quickly extract additional parameters needed
 		/// to locate templates, like the theme or language in effect for the request
 		/// </summary>
-		/// <param name="templateLocation">Context information for the current request</param>
+		/// <param name="template">Context information for the current request</param>
 		/// <returns>An in-order array of values which are meaningful to BuildDescriptor on the same implementation class</returns>
-		IDictionary<string, object> GetExtraParameters(TemplateLocation templateLocation);
+		IDictionary<string, object> GetExtraParameters(Template template);
 
 		/// <summary>
 		/// Given a set of MVC-specific parameters, a descriptor for the target view is created. This can
@@ -62,12 +62,12 @@ namespace MailPimp.Templates
 			grammar = new MasterGrammar(engine.Settings.Prefix);
 		}
 
-		public virtual IDictionary<string, object> GetExtraParameters(TemplateLocation templateLocation)
+		public virtual IDictionary<string, object> GetExtraParameters(Template template)
 		{
 			var extra = new Dictionary<string, object>();
 			foreach (var filter in Filters)
 			{
-				filter.ExtraParameters(templateLocation, extra);
+				filter.ExtraParameters(template, extra);
 			}
 
 			return extra;

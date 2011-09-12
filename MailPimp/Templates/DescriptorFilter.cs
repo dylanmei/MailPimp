@@ -10,7 +10,7 @@ namespace MailPimp.Templates
 		/// </summary>
 		/// <param name="templateLocation">The current request's action templateLocation</param>
 		/// <param name="extra">Dictionary where additional parameters should be added</param>
-		void ExtraParameters(TemplateLocation templateLocation, IDictionary<string, object> extra);
+		void ExtraParameters(Template template, IDictionary<string, object> extra);
 
 		/// <summary>
 		/// The DefaultDescriptorBuider calls this method for the filter to return a modified enumerable

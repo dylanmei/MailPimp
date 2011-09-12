@@ -1,27 +1,28 @@
 ﻿using System;
-using System.Text;
+using MailPimp.Templates;
 using PathHelper = System.IO.Path;
 
-namespace MailPimp.Templates
+namespace MailPimp.Storage.Amazon
 {
-	public class TemplateLocation
+	public sealed class AmazonTemplate : Template
 	{
 		readonly Uri BaseUri;
-		readonly IStorageClient client;
+		readonly Func<Uri, string> client;
+		string source;
 
-		public TemplateLocation(Uri baseUri, IStorageClient client)
+		internal AmazonTemplate(Uri baseUri, Func<Uri, string> client)
 		{
 			BaseUri = baseUri;
 			this.client = client;
 		}
 
-		public string GetSource()
+		public override string Source
 		{
-			return client.Read(Uri, Encoding.UTF8);
+			get
+			{
+				return source ?? (source = client(Uri));
+			}
 		}
-
-		public string Path { get; set; }
-		public DateTime LastModified { get; set; }
 
 		public Uri Uri
 		{
@@ -31,7 +32,7 @@ namespace MailPimp.Templates
 			}
 		}
 
-		public string Name
+		public override string Name
 		{
 			get
 			{
@@ -39,7 +40,7 @@ namespace MailPimp.Templates
 			}
 		}
 
-		public string Directory
+		public override string Folder
 		{
 			get
 			{

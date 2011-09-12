@@ -4,24 +4,24 @@ using Spark.FileSystem;
 
 namespace MailPimp.Templates
 {
-	public class TemplateFile : IViewFile
+	public class TemplateViewFile : IViewFile
 	{
-		readonly TemplateLocation location;
+		readonly Template template;
 
-		public TemplateFile(TemplateLocation location)
+		public TemplateViewFile(Template template)
 		{
-			this.location = location;
+			this.template = template;
 		}
 
 		public Stream OpenViewStream()
 		{
-			var contents = location.GetSource();
+			var contents = template.Source;
 			return new MemoryStream(Encoding.UTF8.GetBytes(contents));
 		}
 
 		public long LastModified
 		{
-			get { return location.LastModified.Ticks; }
+			get { return template.LastModified.Ticks; }
 		}
 	}
 }

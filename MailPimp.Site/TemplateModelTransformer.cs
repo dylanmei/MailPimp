@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
-
-namespace MailPimp.Templates
+using MailPimp.Templates;
+ 
+namespace MailPimp
 {
 	public class TemplateModelTransformer : IDynamicModelTransformer
 	{

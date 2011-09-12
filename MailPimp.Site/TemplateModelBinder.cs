@@ -1,6 +1,7 @@
 ﻿using System;
+using MailPimp.Templates;
 
-namespace MailPimp.Templates
+namespace MailPimp
 {
 	public class TemplateModelBinder : DynamicModelBinder
 	{

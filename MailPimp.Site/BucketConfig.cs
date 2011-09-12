@@ -3,7 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Xml.Linq;
 
-namespace MailPimp.Templates
+namespace MailPimp
 {
 	static class BucketConfig
 	{
@@ -12,18 +12,18 @@ namespace MailPimp.Templates
 			public const string S3_BUCKET_NAME = "S3_BUCKET_NAME";
 		}
 
-		public static string GetValue()
+		public static string GetName()
 		{
 			string value;
 			if ((value = ConfigurationManager.AppSettings[Keys.S3_BUCKET_NAME]) == "")
 			{
-				if ((value = GetHiddenValue()) == null)
+				if ((value = GetHiddenValue("name")) == null)
 					throw new ConfigurationErrorsException("Missing S3 bucket name.");
 			}
-			return string.Format("https://s3.amazonaws.com/{0}/", value);
+			return value;
 		}
 
-		static string GetHiddenValue()
+		static string GetHiddenValue(string key)
 		{
 			var path = GetHiddenConfigPath();
 			if (!string.IsNullOrEmpty(path))
@@ -31,7 +31,7 @@ namespace MailPimp.Templates
 				using (var stream = new FileStream(path, FileMode.Open))
 				{
 					var config = XElement.Load(stream);
-					var name = config.Element("name");
+					var name = config.Element(key);
 					if (name != null) return name.Value;
 				}
 			}
