@@ -1,0 +1,20 @@
+﻿
+<html>
+	<head>
+		<title>${Subject}</title>
+	</head>
+	<body>
+		<p>The Muppet Show is a great movie!</p>
+		<blockquote style="width:200px;">
+			${Model.Message}
+			<br /><i>-- ${From.Name}</i>
+		</blockquote>
+		<p>These are my favorite Muppets:</p>
+		<ul>
+			<for each="var muppet in Model.Muppets">
+				<render partial="muppet" Name="muppet.Name" />
+			</for>
+		</ul>
+		<render partial="footer" />
+	</body>
+</html>
